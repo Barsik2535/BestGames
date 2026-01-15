@@ -1,0 +1,85 @@
+{% load static %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div >
+    <div>
+        <div >
+            <div >
+                <div >
+                    <h3>Мой профиль</h3>
+                </div>
+
+                <div >
+                    <!-- Сообщения об успехе/ошибке -->
+
+
+                    <li><a  href="{% url 'cart' %}">Корзина</a></li>
+<li><a href="{% url 'order_history' %}">История покупок</a></li>
+
+                    <div >
+
+                        <div >
+                            <h5>Основная информация</h5>
+                        </div>
+
+                        <div >
+                            <strong>Имя:</strong>
+                            <p>{{ user.first_name|default:"Не указано" }}</p>
+                        </div>
+
+                        <div >
+                            <strong>Фамилия:</strong>
+                            <p>{{ user.last_name|default:"Не указано" }}</p>
+                        </div>
+
+                        <div >
+                            <strong>Email:</strong>
+                            <p>{{ user.email }}</p>
+                        </div>
+
+                        <div >
+                            <strong>Дата регистрации:</strong>
+                            <p>{{ user.date_joined|date:"d.m.Y H:i" }}</p>
+                        </div>
+
+                        <div >
+                            <strong>Статус:</strong>
+                            {% if user.is_active %}
+                                <span >Активен</span>
+                            {% else %}
+                                <span >Неактивен</span>
+                            {% endif %}
+
+                            {% if user.is_staff %}
+                                <span >Сотрудник</span>
+                            {% endif %}
+
+                            {% if user.is_superuser %}
+                                <span >Администратор</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <a href="{% url 'edit_profile' %}" >
+                            <i class="bi bi-pencil-square"></i> Редактировать профиль
+                        </a>
+                        <a href="{% url 'password_change' %}" >
+                            <i></i> Изменить пароль
+                        </a>
+                    </div>
+                </div>
+
+                <div >
+                    Последний вход: {{ user.last_login|default:"Никогда"|date:"d.m.Y H:i" }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% load static %}
+<html lang="en">
+<head>
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for item in cart_items %}
+<div >
+    <div >
+        <h5>{{ item.game.title }}</h5>
+        <p>Цена: {{ item.game.price }} ₽ × {{ item.quantity }}</p>
+        <p>Итого: {{ item.total_price }} ₽</p>
+    </div>
+<form method="post" action="{% url 'remove_from_cart' item.id %}">
+            {% csrf_token %}
+            <button type="submit">
+                Удалить
+            </button>
+        </form>
+</div>
+{% empty %}
+<p>Корзина пуста</p>
+{% endfor %}
+{% if cart_items %}
+<h4>Общая сумма: {{ total }} ₽</h4>
+<form method="post" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <button type="submit">
+                Оформить заказ
+            </button>
+</form>
+{% endif %}
+</body>
+</html>

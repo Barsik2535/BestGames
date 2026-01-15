@@ -1,0 +1,23 @@
+{% load static %}
+{% for order in orders %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div>
+    <div >
+        Заказ #{{ order.id }} от {{ order.created_at|date:"d.m.Y H:i" }}
+        — {{ order.get_status_display }}
+    </div>
+    <div >
+        {% for item in order.items.all %}
+        <p>{{ item.game.title }} × {{ item.quantity }} = {{ item.subtotal }} ₽</p>
+        {% endfor %}
+        <p class="fw-bold mt-3">Итого: {{ order.total_amount }} ₽</p>
+    </div>
+
+<form method="post" action="{% url 'clear_history' order.id %}">
+    {% csrf_token %}
+    <button type="submit">Очистить историю </button>
+</form>
+</div>
+{% empty %}
+<p>У вас пока нет заказов</p>
+{% endfor %}

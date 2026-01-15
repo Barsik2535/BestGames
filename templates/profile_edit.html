@@ -1,0 +1,72 @@
+{% load static %}
+
+{% block title %}Редактировать профиль{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="container">
+    <div >
+        <div >
+            <div>
+                <div>
+                    <h3>Редактирование профиля</h3>
+                </div>
+
+                <div >
+                    <!-- Сообщения -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div>
+                            <label class="form-label">Email (логин)</label>
+                            {{ form.email }}
+                            <small class="text-muted">Используется для входа в систему</small>
+                            {% if form.email.errors %}
+                                <div class="text-danger mt-1">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div >
+                                <label class="form-label">Имя</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <div>{{ form.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div >
+                                <label class="form-label">Фамилия</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <div >{{ form.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Кнопки -->
+                        <div>
+                            <a href="{% url 'profile' %}">
+                                Отмена
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
