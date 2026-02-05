@@ -1,0 +1,59 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 120px; padding-bottom: 100px;">
+    <h1 class="section-title">Мой профиль</h1>
+
+    <div style="max-width: 760px; margin: 0 auto;">
+        {% if messages %}
+            {% for message in messages %}
+            <div style="background: #2a2a40; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; border-left: 4px solid #6c5ce7;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="game-card" style="padding: 32px; margin-bottom: 40px;">
+            <h3 style="margin-bottom: 28px; font-size: 1.8rem;">Основная информация</h3>
+
+            <div style="display: grid; gap: 16px 24px; grid-template-columns: auto 1fr; font-size: 1.05rem;">
+                <strong>Имя:</strong>           <span>{{ user.first_name|default:"Не указано" }}</span>
+                <strong>Фамилия:</strong>       <span>{{ user.last_name|default:"Не указано" }}</span>
+                <strong>Email:</strong>         <span>{{ user.email }}</span>
+                <strong>Дата регистрации:</strong> <span>{{ user.date_joined|date:"d.m.Y H:i" }}</span>
+                <strong>Статус:</strong>
+                <span>
+                    {% if user.is_active %}
+                        <span style="color: #00d084; font-weight: 500;">Активен</span>
+                    {% else %}
+                        <span style="color: #ff4757;">Неактивен</span>
+                    {% endif %}
+                    {% if user.is_staff %}<span style="margin-left: 16px; color: #ffa502;">Сотрудник</span>{% endif %}
+                    {% if user.is_superuser %}<span style="margin-left: 16px; color: #ff6b6b;">Администратор</span>{% endif %}
+                </span>
+            </div>
+
+            <div style="margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;">
+                <a href="{% url 'edit_profile' %}" class="btn btn-primary">
+                    <i class="bi bi-pencil-square"></i> Редактировать профиль
+                </a>
+                <a href="{% url 'password_change' %}" class="btn btn-outline">
+                    Изменить пароль
+                </a>
+            </div>
+        </div>
+
+        <div style="text-align: center; color: #a0a0cc; font-size: 0.98rem; margin-bottom: 32px;">
+            Последний вход: {{ user.last_login|default:"Никогда"|date:"d.m.Y H:i" }}
+        </div>
+
+        <div style="text-align: center;">
+            <a href="{% url 'cart' %}" class="nav-link" style="margin: 0 24px; font-size: 1.1rem;">Корзина</a>
+            <a href="{% url 'order_history' %}" class="nav-link" style="font-size: 1.1rem;">История покупок</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

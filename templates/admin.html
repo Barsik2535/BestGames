@@ -1,0 +1,125 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block title %}Добавить игру — Админ{% endblock %}
+
+{% block content %}
+
+    <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<div >
+    <div >
+        <div >
+            <h1 >Управление играми на главной</h1>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+            <div >
+                <div >
+                    <h3>Добавить новую игру</h3>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div >
+                            <div >
+                                <label >Название игры</label>
+                                {{ form.title }}
+                                {{ form.title.errors }}
+                            </div>
+
+                            <div >
+                                <label>Жанр</label>
+                                {{ form.genre }}
+                                {{ form.genre.errors }}
+                            </div>
+
+                            <div >
+                                <label >Разработчик</label>
+                                {{ form.developer }}
+                                {{ form.developer.errors }}
+                            </div>
+
+                            <div>
+                                <label >Стоимость</label>
+                                {{ form.price }}
+                                {{ form.price.errors }}
+                            </div>
+
+                            <div >
+                                <label >Изображение</label>
+                                {{ form.image }}
+                                {{ form.image.errors }}
+                            </div>
+
+                            <div>
+                                <label >Описание</label>
+                                {{ form.description }}
+                                {{ form.description.errors }}
+                            </div>
+
+                            <div>
+                                <div>
+                                    {{ form.is_active }}
+                                    <label  for="{{ form.is_active.id_for_label }}">
+                                        Показывать на главной странице
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div >
+                            <button type="submit" >
+                                Добавить игру
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Список существующих игр с кнопками удаления -->
+            <div >
+                <div >
+                    <h3 >Игры на главной</h3>
+
+                    {% if games %}
+                        <ul >
+                            {% for game in games %}
+                            <li>
+                                <div>
+                                    {{ game.title }}
+                                    {% if game.is_active %}
+                                        <span >На главной</span>
+                                    {% else %}
+                                        <span >Скрыта</span>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Рабочая форма удаления -->
+                                <form method="post" action="{% url 'admin_delete_game' game.id %}" >
+                                    {% csrf_token %}
+                                    <button type="submit" onclick="return confirm('Удалить игру «{{ game.title|escapejs }}»?');">
+                                        Удалить
+                                    </button>
+                                </form>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>Пока нет игр на главной странице</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

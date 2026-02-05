@@ -1,0 +1,50 @@
+
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 120px; padding-bottom: 100px;">
+    <h1 class="section-title">Корзина</h1>
+
+    {% if cart_items %}
+        <div style="display: grid; gap: 20px; margin-bottom: 48px;">
+            {% for item in cart_items %}
+            <div class="game-card" style="padding: 20px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;">
+                <div style="flex: 1;">
+                    <h5 style="margin-bottom: 8px; font-size: 1.4rem;">{{ item.game.title }}</h5>
+                    <p style="color: #a0a0cc; margin-bottom: 4px;">
+                        Цена: {{ item.game.price }} ₽ × {{ item.quantity }}
+                    </p>
+                    <p style="font-weight: 600; font-size: 1.15rem;">Итого: {{ item.total_price }} ₽</p>
+                </div>
+
+                <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline" style="border-color: #ff4757; color: #ff4757;">
+                        Удалить
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="text-align: center; max-width: 500px; margin: 0 auto;">
+            <h4 style="font-size: 1.8rem; margin-bottom: 24px;">
+                Общая сумма: <span style="color: #6c5ce7;">{{ total }} ₽</span>
+            </h4>
+            <form method="post" action="{% url 'checkout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" style="padding: 14px 48px; font-size: 1.2rem;">
+                    Оформить заказ
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>Корзина пуста</h3>
+            <p style="margin-top: 16px;">Добавьте игры из каталога</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

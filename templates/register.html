@@ -1,0 +1,62 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+
+<div >Регистрация</div>
+<div>
+<form method="post">
+{% csrf_token %}
+
+{% if form.non_field_errors %}
+<div >
+{% for error in form.non_field_errors %}
+{{ error }}
+{% endfor %}
+</div>
+{% endif %}
+
+<div >
+{{ form.email.label_tag }}
+{{ form.email }}
+{% if form.email.errors %}
+<div>{{ form.email.errors }}</div>
+{% endif %}
+</div>
+
+<div>
+{{ form.first_name.label_tag }}
+{{ form.first_name }}
+</div>
+
+<div >
+{{ form.last_name.label_tag }}
+{{ form.last_name }}
+</div>
+
+<div >
+{{ form.password1.label_tag }}
+{{ form.password1 }}
+{% if form.password1.errors %}
+<div>{{ form.password1.errors }}</div>
+{% endif %}
+<small>{{ form.password1.help_text }}</small>
+</div>
+
+<div >
+{{ form.password2.label_tag }}
+{{ form.password2 }}
+{% if form.password2.errors %}
+<div>{{ form.password2.errors }}</div>
+{% endif %}
+</div>
+
+<button type="submit">Зарегистрироваться</button>
+</form>
+</div>
+<div>
+Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+</div>
+
+{% endblock %}
+

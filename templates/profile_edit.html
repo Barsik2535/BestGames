@@ -1,0 +1,56 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block title %}Редактировать профиль{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 120px; max-width: 720px; padding-bottom: 80px;">
+    <h1 class="section-title">Редактирование профиля</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div style="background: #2a2a40; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; border-left: 4px solid #6c5ce7;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="game-card" style="padding: 32px;">
+        <form method="post">
+            {% csrf_token %}
+
+            <div style="margin-bottom: 28px;">
+                <label class="form-label" style="display: block; margin-bottom: 8px; color: #a0a0cc; font-weight: 500;">Email (логин)</label>
+                {{ form.email }}
+                <small style="color: #a0a0cc; display: block; margin-top: 6px;">Используется для входа в систему</small>
+                {% if form.email.errors %}
+                    <div style="color: #ff4757; margin-top: 8px; font-size: 0.95rem;">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+                <div>
+                    <label class="form-label" style="display: block; margin-bottom: 8px; color: #a0a0cc; font-weight: 500;">Имя</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <div style="color: #ff4757; margin-top: 6px;">{{ form.first_name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="form-label" style="display: block; margin-bottom: 8px; color: #a0a0cc; font-weight: 500;">Фамилия</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <div style="color: #ff4757; margin-top: 6px;">{{ form.last_name.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; justify-content: flex-end;">
+                <a href="{% url 'profile' %}" class="btn btn-outline">Отмена</a>
+                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

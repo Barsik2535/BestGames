@@ -43,13 +43,9 @@ class LoginView(View):
         if form.is_valid():
             email=form.cleaned_data.get('email')
             password=form.cleaned_data.get('password')
-            print("DEBUG LOGIN ATTEMPT:")
-            print(f"  Email: '{email}'")
-            print(f"  Password: {password[:3]}***")
+
             user = authenticate(username=email, password=password)
-            print(f"  Authenticate result: {user}")
             if user is not None:
-                print('SUCCESS')
                 login(request,user)
                 messages.success(request, f'Hello,{user.get_short_name()}!')
                 return redirect('home')
@@ -143,7 +139,6 @@ def add_to_cart(request, game_id):
     if not created:
         cart_item.quantity += 1
         cart_item.save()
-
     messages.success(request,f"{game.title} добавлена в корзину")
     return redirect('cart')
 
@@ -214,10 +209,6 @@ def delete_history(request,order_id):
         return redirect('order_history')
     return redirect('order_history')
 
-
-
-
-
 #API
 
 @csrf_exempt
@@ -275,7 +266,7 @@ def api_register(request):
 
 
     try:
-        # Пытаемся получить тело запроса разными способами
+
         if request.body:
             try:
                 data = json.loads(request.body.decode('utf-8'))
@@ -340,7 +331,7 @@ def api_register(request):
                 last_name=last_name
             )
 
-            # Автоматически входим после регистрации
+
             login(request, user)
 
             return JsonResponse({
@@ -567,3 +558,9 @@ def api_order_history(request):
     }, safe=False)
 
 
+class CatalogViews(TemplateView):
+    template_name = 'catalog.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['games']=Game.objects.filter(is_active=True).order_by('-created_at')[:12]
+        return context

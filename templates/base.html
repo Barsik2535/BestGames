@@ -1,0 +1,54 @@
+
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container header-inner">
+        <a href="{% url 'home' %}" class="logo">
+            <img src="{% static 'img/logo.svg' %}" alt="BestGames" width="40" height="40">
+            <span>BestGames</span>
+
+        </a>
+
+        <button class="menu-toggle" aria-label="Открыть меню">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav class="nav">
+
+            <a href="#catalog" class="nav-link">Каталог игр</a>
+             {% if user.is_staff %}
+                 <a href="{% url 'admin' %}" class="nav-link">Админ-панель</a>
+             {% endif %}
+
+            {% if user.is_authenticated %}
+                <div class="user-menu">
+                    <button class="user-btn">
+                        {{ user.email }}
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="{% url 'profile' %}">Личный кабинет</a>
+                        <a href="{% url 'logout' %}">Выйти</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="auth-buttons">
+                    <a href="{% url 'login' %}" class="btn btn-outline">Войти</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Регистрация</a>
+                </div>
+            {% endif %}
+        </nav>
+    </div>
+   <main class="main-content">
+       {% block content %}
+       {% endblock %}
+   </main>
+</body>
+</html>

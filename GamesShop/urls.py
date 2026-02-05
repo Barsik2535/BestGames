@@ -31,6 +31,7 @@ urlpatterns = [
     path('cart/checkout/', views.checkout, name='checkout'),
     path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('profile/clear-orders/<int:order_id>', views.delete_history, name='clear_history'),
+    path('catalog/', views.CatalogViews.as_view(), name='catalog'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

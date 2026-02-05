@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block title %}История покупок{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 120px; padding-bottom: 100px;">
+    <h1 class="section-title">История покупок</h1>
+
+    {% if orders %}
+        <div style="display: grid; gap: 28px;">
+            {% for order in orders %}
+            <div class="game-card" style="padding: 28px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+                    <h3 style="font-size: 1.5rem; margin: 0;">
+                        Заказ #{{ order.id }} • {{ order.created_at|date:"d.m.Y H:i" }}
+                    </h3>
+                    <span style="padding: 6px 16px; border-radius: 20px; background: #2a2a40; color: #a0a0cc; font-weight: 500;">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+
+                <div style="margin-bottom: 24px; color: #a0a0cc; line-height: 1.7;">
+                    {% for item in order.items.all %}
+                    <div style="margin: 10px 0;">
+                        {{ item.game.title }} × {{ item.quantity }} = <strong style="color: #e0e0ff;">{{ item.subtotal }} ₽</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2a40; padding-top: 20px;">
+                    <div style="font-size: 1.5rem; font-weight: 700;">
+                        Итого: <span style="color: #6c5ce7;">{{ order.total_amount }} ₽</span>
+                    </div>
+
+                    <form method="post" action="{% url 'clear_history' order.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline" style="color: #ff4757; border-color: #ff4757;">
+                            Очистить
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>У вас пока нет заказов</h3>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

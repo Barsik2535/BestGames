@@ -69,24 +69,17 @@ class GameAddForm(forms.ModelForm):
 
         def save(self, commit=True):
             instance = super().save(commit=False)
+            image = self.cleaned_data.get('image')
 
-            if self.cleaned_data.get('image'):
-                image_file = self.cleaned_data['image']
-                if image_file:
-                    # Получаем расширение
-                    ext = os.path.splitext(image_file.name)[1]
-                    # Имя без расширения
-                    base_name = os.path.splitext(image_file.name)[0]
-                    try:
-                        translit_name = translit(base_name, reversed=True)
-                    except exceptions.TransliterationError:
-                        translit_name = base_name
+            if image:
+                base_name, ext = os.path.splitext(image.name)
+                try:
+                    translit_name = translit(base_name, reversed=True)
+                except exceptions.TransliterationError:
+                    translit_name = base_name
 
-                    safe_name = slugify(translit_name) + ext
-                    instance.image.name = os.path.join('games', safe_name)
-            if commit:
-                instance.save()
-
+                safe_name = f"{slugify(translit_name)}{ext}"
+                instance.image.name = os.path.join('games', safe_name)
             return instance
 
         widgets = {
